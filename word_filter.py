@@ -5,4 +5,4 @@ def remove_proper_noun(input_path, output_path):
             if word and not word[0].isupper():
                 outfile.write(word + "\n")
 
-remove_proper_noun("words_fr_beta.txt", "words_fr.txt")
+remove_proper_noun("fr_beta.txt", "fr.txt")
