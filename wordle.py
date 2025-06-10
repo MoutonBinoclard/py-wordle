@@ -29,35 +29,50 @@ def choose_random_word(words):
     return random.choice(words)
 
 
+
 length = 5  # Length of words to filter
 file = "fr.txt"  # File containing the words
-
-print("Loading words...")
 words_list = filter_words(length, remove_special_characters(open_word_file(file)))
-print (f"Loaded {len(words_list)} words of length {length}.")
-
 random_word = choose_random_word(words_list)
+random_list = list(random_word)
+print(random_word)
 
-win = False
+recap_feedback = []  # List to store feedback for each guess
+
 attempts = 6  # Number of attempts allowed
-print(f"Guess the {length}-letter word! You have {attempts} attempts.")
+win = False
 
 while attempts > 0 and not win:
-    guess = input(f"Enter your {length}-letter guess: ").strip().lower()
+    
+    for feedback_line in recap_feedback:
+        print(' '.join(feedback_line))
+
+    guess = input(f"Enter a {length}-letter word: ").strip().lower()
     
     if len(guess) != length:
-        print(f"Please enter a {length}-letter word.")
+        print(f"Please enter a word with exactly {length} letters.")
         continue
     
     if guess not in words_list:
         print("This word is not in the list. Try again.")
         continue
     
+    feedback = []
+    for i, letter in enumerate(guess):
+        if letter == random_list[i]:
+            feedback.append(letter.upper())  # Correct letter in correct position
+        elif letter in random_list:
+            feedback.append(letter)  # Correct letter but wrong position
+        else:
+            feedback.append('.')  # Incorrect letter
+    recap_feedback.append(feedback)
+    
+    #print("Feedback:", ' '.join(feedback))
+    
     if guess == random_word:
         win = True
-        print("Congratulations! You've guessed the word!")
-    else:
-        attempts -= 1
-        print(f"Wrong guess! You have {attempts} attempts left.")
+        print("Congratulations! You've guessed the word:", random_word)
+    
+    attempts -= 1
 
 
